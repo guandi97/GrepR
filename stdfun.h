@@ -12,6 +12,7 @@ int ati(char*);
 int memcp(char*,char*,size_t);
 int readline(int,char*);
 int buffwrite(file*);
+int fsflush(file*);
 
 struct struct_file
 {
@@ -42,6 +43,18 @@ int memcp(char *data,char *target,size_t size)
 int readline(int fd,char *buff)
 {
 }
-int buffwrite(file *strmout)
+int buffwrite(char *source,file *strmout,short size)
 {
+	if((strmout.index-size)<0) 
+	{
+		fsflush(*strmout);
+	}
+	return memcp(*source,&strmout.buff[strmout.index],size);
 }
+int fsflush(file *strmout)
+{
+	int i=write(strmout.fd,&strmout.buff,strmout.index);
+	strmout.index=0;
+	return i;
+}
+
