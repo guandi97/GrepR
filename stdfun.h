@@ -5,32 +5,33 @@
 
 #include <unistd.h>
 
-struct struct_file;
-
+typedef struct struct_file file;
 int sterlen(char*);						//loops until 0x0 is found
 int ati(char*);
 int memcp(char*,char*,size_t);
 int readline(int,char*);
-int buffwrite(file*);
+int buffwrite(char*,file*,size_t);
 int fsflush(file*);
+
 
 struct struct_file
 {
 	int fd;
 	size_t index;
 	char buff[1024];
-}file;
+};
 
 int sterlen(char *str)
 {
-	i=0;
-	while(*(char+i)!=0x0) i++;
+	int i=0;
+	while(*(str+i)!=0x0) i++;
 
 	return i;
 }
 int ati(char *str)
 {
-	
+	int i;
+	return i;
 }
 int memcp(char *data,char *target,size_t size)
 {
@@ -42,19 +43,21 @@ int memcp(char *data,char *target,size_t size)
 }
 int readline(int fd,char *buff)
 {
+	int i;
+	return i;
 }
-int buffwrite(char *source,file *strmout,short size)
+int buffwrite(char *source,file *strmout,size_t size)
 {
-	if((strmout.index-size)<0) 
+	if((1024-strmout->index)<size) 
 	{
-		fsflush(*strmout);
+		fsflush(strmout);
 	}
-	return memcp(*source,&strmout.buff[strmout.index],size);
+	return memcp(source,&strmout->buff[strmout->index],size);
 }
 int fsflush(file *strmout)
 {
-	int i=write(strmout.fd,&strmout.buff,strmout.index);
-	strmout.index=0;
+	int i=write(strmout->fd,&strmout->buff,strmout->index);
+	strmout->index=0;
 	return i;
 }
 

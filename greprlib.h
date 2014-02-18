@@ -1,10 +1,17 @@
-int process_flags(int,char**,struct struct_flags*);
-int check_regex();
-int process_regex(); 
-int match_regex();
-int readin();
-void fubar(char);
+//Guandi97
 
+#include <unistd.h>
+//include "stdfun.h"
+
+//int process_flags(int,char**,struct struct_flags*);				//return # of index
+int process_regex(); 								//return regex #
+int match_regex();								//return index of last reg
+int readin();									//return line size
+void fubar(char*);
+
+char **regex_list;
+
+/*
 int process_flags(int argc,char **argv,struct struct_flags *flags)
 {
 	char i,j;
@@ -71,12 +78,19 @@ int process_flags(int argc,char **argv,struct struct_flags *flags)
 	//if hits this, error
 	return -1;
 }
-int check_regex()
-{
-}
+*/
 int process_regex()
 {
+	//"registers"
+	int ax,cx,si,di,dx,l=sterlen(&gegex.expr);
+	ax=cx=si=di=dx=0;
 
+	while(cx!=l)
+	{
+		
+	}
+	
+	return ax;
 }
 int match_regex()
 {
@@ -84,9 +98,10 @@ int match_regex()
 int readin()
 {
 	strm.lNum++;
-	return readline(strm.fd,&strm.line);
+	return readline(strm.in,&strm.line);
 }
 void fubar(char *err)
 {
 	write(1,err,sterlen(err));
+	sys_exit(1);
 }

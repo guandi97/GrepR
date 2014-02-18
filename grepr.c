@@ -24,7 +24,6 @@
 /*include either one*/
 //include "asmfun.h" 
 #include "stdfun.h"
-#include "greprlib.h"
 
 #define usage "grepr - a recreation of grep"
 
@@ -32,17 +31,17 @@ struct struct_regex;
 struct struct_input;
 struct struct_flags;
 
-struct struct_regex
+struct struct_gegex
 {
 	int mode;							//
 	int num;							//# of reg
 	size_t index;							//loc of current reg
 	char *expr;							//the regex
 	char *line;							//current line
-}regex={0};
+}gegex={0};
 struct struct_strm							//input filestream
 {
-	int fd;
+	file *in;
 	size_t lNum;
 	char line[1024];						//store current file, maybe inefficient
 }strm={0};
@@ -72,21 +71,22 @@ int main(int argc, char **argv)
 	//initialization, and first assignment
 	int i,j;							//counters
 	int c;								//reg
-	file *strm=calloc(sizeof(file),1);
+	*strm.in=calloc(sizeof(file),1);
 	struct struct_flags *flags=malloc(sizeof(struct struct_flags));
 
 	strm.fd=1;
-	//init regex (set all except mode,index)
-	regex.line=&strm.line;
-	regex.num=process_regex(&regex);
 
 	//process flags
 	c=process_flags(argc,argv,flags);
 	if(c==-1) fubar("failure: process_flags");
-	regex.expr=*(argv+(c+1));
+
+	//init regex (set all except mode,index)
+	gegex.expr=*(argv+(c+1));
+	gegex.num=check_regex();
+	gegex.line=&strm.line;
 
 	//check regex
-	const short reg=check_regex();
+	const short reg=process_regex();
 	if(reg==-1) fubar("failure: check_regex");
 
 	//perform search on every line, until EOF
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 	{
 		MAIN_WHILE97:;
 		//reset regex index for next loop
-		regex.index=0;
+		gegex.index=0;
 		c=readin();
 
 		//proccess the regex, until end of regex (EOF)
@@ -103,9 +103,11 @@ int main(int argc, char **argv)
 		for(i=0;i<reg;i++);
 		{
 			//check proccess_regex
-			if(process_regex()==-1) goto MAIN_WHILE97;
+			if(match_regex()==-1) goto MAIN_WHILE97;
 		}
 		buffwrite(*regex.line,&strm,c);
 	}
 	return 0;
 }
+
+#include "greprlib.h"
