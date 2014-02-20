@@ -5,6 +5,8 @@
 
 #include <unistd.h>
 
+#define asmfun
+
 int sterlen(char*);
 int ati(char*);
 int memcp(char*,char*,size_t);

@@ -5,109 +5,76 @@
  regex should be in perl style
  -process_flags()
  	-process flags
- -preprocess_regex()
+ -process_regex()
  	-checks syntax for errors
  	-sets # of regex constant
  -infinit while loop
- -readin
-	-store 1 line, check EOF
+ 	-readin
+		-from strm.in
+		-store 1 line, check EOF
  -if readin=EOF, break
- -process_regex()
- 	-proccess each expression independently while checking line with match_regex()
- 	-match_regex()
+	-proccess each expression independently while checking line with match_regex()
+	-match_regex()
+		-if not match, break
 		-increment counter
- -if counter = regex constant, print line
+ 	-if counter = regex constant, print line to stdout
+-return 0;
  
  */
+
+
 #include <unistd.h>
+#include <stdlib.h>
 
-/*include either one*/
-//include "asmfun.h" 
-#include "stdfun.h"
-
-#define usage "grepr - a recreation of grep"
-
-struct struct_regex;
-struct struct_input;
-struct struct_flags;
-
-struct struct_gegex
-{
-	int mode;							//
-	int num;							//# of reg
-	size_t index;							//loc of current reg
-	char *expr;							//the regex
-	char *line;							//current line
-}gegex={0};
-struct struct_strm							//input filestream
-{
-	file *in;
-	size_t lNum;
-	char line[1024];						//store current file, maybe inefficient
-}strm={0};
-struct struct_flags							//flags, and parameters
-{
-	char
-	A,
-	B,
-	b,
-	c,
-	f,								//--file=<file>, or -f <file>	
-	H,
-	h,
-	i,
-	m,
-	n,
-	o,
-	q,
-	v;
-	
-	int in;
-	char file[32];
-};
+/*include either one by defining the one not in use*/
+#define asmfun
+#define grepr
+#include "grepr_lib.h"
 
 int main(int argc, char **argv)
 {
 	//initialization, and first assignment
 	int i,j;							//counters
 	int c;								//reg
-	*strm.in=calloc(sizeof(file),1);
+	file *out=malloc(sizeof(file));
+	strm.in=malloc(sizeof(file));
+	strm.line=malloc(1024);
 	struct struct_flags *flags=malloc(sizeof(struct struct_flags));
 
-	strm.fd=1;
+	strm.in->fd=0;
+	out->fd=1;
 
 	//process flags
-	c=process_flags(argc,argv,flags);
+	c=parse_flags(argc,argv,flags);
 	if(c==-1) fubar("failure: process_flags");
 
 	//init regex (set all except mode,index)
-	gegex.expr=*(argv+(c+1));
-	gegex.num=check_regex();
-	gegex.line=&strm.line;
+	gegex.expr=*(argv+(argc));
+	gegex.index=0;
+	gegex.line=strm.line;
 
 	//check regex
-	const short reg=process_regex();
-	if(reg==-1) fubar("failure: check_regex");
+	gegex.num=process_regex();
+	if(gegex.num==-1) fubar("failure: check_regex");
 
 	//perform search on every line, until EOF
-	c=0;
-	while(readin()==0);
+	gegex.index=0;
+	c=readin();
+	do 
 	{
-		MAIN_WHILE97:;
+		//proccess the regex, until end of regex (EOF)
+		//if match, writeline (if flags allow) to buffwrite(strm.fd)
+		for(i=0;i<gegex.num;i++)
+		{
+			//check proccess_regex
+			if(match_regex()==-1) goto MAIN_DO97;
+		}
+		buffwrite(gegex.line,out,c);
+
+		MAIN_DO97:;
 		//reset regex index for next loop
 		gegex.index=0;
 		c=readin();
-
-		//proccess the regex, until end of regex (EOF)
-		//if match, writeline (if flags allow) to buffwrite(strm.fd)
-		for(i=0;i<reg;i++);
-		{
-			//check proccess_regex
-			if(match_regex()==-1) goto MAIN_WHILE97;
-		}
-		buffwrite(*regex.line,&strm,c);
-	}
+	}while(c!=-1);
 	return 0;
 }
-
-#include "greprlib.h"

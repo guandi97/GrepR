@@ -5,6 +5,8 @@
 
 #include <unistd.h>
 
+#define stdfun
+
 typedef struct struct_file file;
 int sterlen(char*);						//loops until 0x0 is found
 int ati(char*);
