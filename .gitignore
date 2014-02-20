@@ -6,6 +6,9 @@
 *.lib
 *.a
 
+#precompiled headers
+*.gch
+
 # Shared objects (inc. Windows DLLs)
 *.dll
 *.so
