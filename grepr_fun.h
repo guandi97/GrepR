@@ -7,7 +7,7 @@
 
 int parse_flags(int,char**,struct struct_flags*);				//return # of index
 int process_regex(); 								//return regex #
-int match_regex();								//return index of last reg
+int parse_regex();								//return index of last reg
 int readin();									//return line size
 void fubar(char*);
 
@@ -34,8 +34,8 @@ int parse_flags(int argc,char **argv,struct struct_flags *flags)
 		{
 			case 'f': 	flags->f=1; 
 					i++;
-					if(memcp(argv[i],flags->file,sterlen(argv[i]))==-1) fubar("failure: process_flags, memcp()");
-					c=open(*flags->file,O_RONLY);
+					if(memcp(argv[i],flags.file,sterlen(argv[i]))==-1) fubar("failure: process_flags, memcp()");
+					c=open(*flags.file,O_RONLY);
 					if(c==-1) fubar("failure: process_flags, open()");
 					strm.fd=c;
 					goto FLAGFORLOOPEND;
@@ -46,29 +46,29 @@ int parse_flags(int argc,char **argv,struct struct_flags *flags)
 		{
 			switch(argv[i][j])
 			{
-				case 'A':	flags->A=1;
+				case 'A':	flags.A=1;
 						break;
-				case 'B':	flags->B=1;	
+				case 'B':	flags.B=1;	
 						break;
-				case 'b':	flags->b=1;
+				case 'b':	flags.b=1;
 						break;
-				case 'c':	flags->c=1;
+				case 'c':	flags.c=1;
 						break;
-				case 'H':	flags->H=1;
+				case 'H':	flags.H=1;
 						break;
-				case 'h':	flags->h=1;
+				case 'h':	flags.h=1;
 						break;
-				case 'i':	flags->i=1;
+				case 'i':	flags.i=1;
 						break;
-				case 'm':	flags->o=1;
+				case 'm':	flags.o=1;
 						break;
-				case 'n':	flags->n=1;
+				case 'n':	flags.n=1;
 						break;
-				case 'o':	flags->o=1;
+				case 'o':	flags.o=1;
 						break;
-				case 'q':	flags->q=1;
+				case 'q':	flags.q=1;
 						break;
-				case 'v':	flags->v=1;
+				case 'v':	flags.v=1;
 						break;
 			}
 		}
@@ -92,7 +92,7 @@ int process_regex()
 	
 	return ax;
 }
-int match_regex()
+int parse_regex()
 {
 	return 0;
 }

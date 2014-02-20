@@ -2,24 +2,7 @@
  GREP recreation
  grep takes command line regular expression and proccesses stdin
 
- regex should be in perl style
- -process_flags()
- 	-process flags
- -process_regex()
- 	-checks syntax for errors
- 	-sets # of regex constant
- -infinit while loop
- 	-readin
-		-from strm.in
-		-store 1 line, check EOF
- -if readin=EOF, break
-	-proccess each expression independently while checking line with match_regex()
-	-match_regex()
-		-if not match, break
-		-increment counter
- 	-if counter = regex constant, print line to stdout
--return 0;
- 
+ Guandi97
  */
 
 
@@ -34,12 +17,11 @@
 int main(int argc, char **argv)
 {
 	//initialization, and first assignment
-	int i,j;							//counters
+	int i,j;							//counter,accumulator
 	int c;								//reg
 	file *out=malloc(sizeof(file));
 	strm.in=malloc(sizeof(file));
 	strm.line=malloc(1024);
-	struct struct_flags *flags=malloc(sizeof(struct struct_flags));
 
 	strm.in->fd=0;
 	out->fd=1;
@@ -67,11 +49,11 @@ int main(int argc, char **argv)
 		for(i=0;i<gegex.num;i++)
 		{
 			//check proccess_regex
-			if(match_regex()==-1) goto MAIN_DO97;
+			if(parse_regex()==-1) goto MAIN_DO50;
 		}
 		buffwrite(gegex.line,out,c);
 
-		MAIN_DO97:;
+		MAIN_DO50:;
 		//reset regex index for next loop
 		gegex.index=0;
 		c=readin();

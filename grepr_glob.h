@@ -1,10 +1,10 @@
-#define greprdef
+#define grepr_glob
 
 #include "grepr_lib.h"
 
 struct struct_gegex gegx;
 struct struct_strm strm;
-struct struct_flags;
+struct struct_flags flags;
 
 struct struct_gegex
 {
@@ -39,5 +39,5 @@ struct struct_flags                                                     //flags,
         v;  
     
         int in; 
-        char file[32];
-};
+        char file[64];
+}flags={0};
