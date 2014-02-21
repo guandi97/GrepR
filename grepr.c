@@ -11,6 +11,7 @@
 
 /*include either one by defining the one not in use*/
 #define asmfun
+
 #define grepr
 #include "grepr_lib.h"
 
@@ -27,8 +28,8 @@ int main(int argc, char **argv)
 	out->fd=1;
 
 	//process flags
-	c=parse_flags(argc,argv,flags);
-	if(c==-1) fubar("failure: process_flags");
+	c=parse_flags(argc,argv);
+	if(c==-1) fubar("failure: parse_flags\n");
 
 	//init regex (set all except mode,index)
 	gegex.expr=*(argv+(argc));
@@ -37,7 +38,7 @@ int main(int argc, char **argv)
 
 	//check regex
 	gegex.num=process_regex();
-	if(gegex.num==-1) fubar("failure: check_regex");
+	if(gegex.num==-1) fubar("failure: process_regex\n");
 
 	//perform search on every line, until EOF
 	gegex.index=0;
@@ -48,7 +49,7 @@ int main(int argc, char **argv)
 		//if match, writeline (if flags allow) to buffwrite(strm.fd)
 		for(i=0;i<gegex.num;i++)
 		{
-			//check proccess_regex
+			//check parse_regex
 			if(parse_regex()==-1) goto MAIN_DO50;
 		}
 		buffwrite(gegex.line,out,c);

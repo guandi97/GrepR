@@ -1,18 +1,19 @@
 //Guandi97
 
 #include <unistd.h>
+#include <fcntl.h>
 
 #define grepr_fun
 #include "grepr_lib.h"
 
-int parse_flags(int,char**,struct struct_flags*);				//return # of index
+int parse_flags(int,char**);				//return # of index
 int process_regex(); 								//return regex #
 int parse_regex();								//return index of last reg
 int readin();									//return line size
+void uexit(char*);
 void fubar(char*);
 
-/*
-int parse_flags(int argc,char **argv,struct struct_flags *flags)
+int parse_flags(int argc,char **argv)
 {
 	char i,j;
 	int c;
@@ -25,24 +26,26 @@ int parse_flags(int argc,char **argv,struct struct_flags *flags)
 		//make sure starts with -, otherwise check if last arg, if not, error
 		if(argv[i][0]!=0x2d) 
 		{
-			if((i+1)!=argc) fubar(usage);
+			#define USAGE1 "lolz\n"
+			if((i+1)!=argc) uexit(USAGE1);
 			return i;
 		}
 
 		//check if it is argument requiring flag
 		switch(argv[i][1])				
 		{
-			case 'f': 	flags->f=1; 
+			case 'f': 	flags.f=1; 
 					i++;
-					if(memcp(argv[i],flags.file,sterlen(argv[i]))==-1) fubar("failure: process_flags, memcp()");
-					c=open(*flags.file,O_RONLY);
-					if(c==-1) fubar("failure: process_flags, open()");
-					strm.fd=c;
+					//sterlen+1 because need to also copy the null
+					if(memcp(argv[i],flags.file,(sterlen(argv[i])+1))==-1) fubar("failure: parse_flags: memcp()\n");
+					c=open(flags.file,O_RDONLY);
+					if(c==-1) fubar("failure: parse_flags: open()\n");
+					strm.in->fd=c;
 					goto FLAGFORLOOPEND;
 		}
 
 		//check all other flags
-		while(argv[i][++j]!=0x20)
+		while(argv[i][++j]!=0x0)
 		{
 			switch(argv[i][j])
 			{
@@ -70,6 +73,10 @@ int parse_flags(int argc,char **argv,struct struct_flags *flags)
 						break;
 				case 'v':	flags.v=1;
 						break;
+				default:	
+						#define USAGE2 "undefined flag\n"
+						write(1,USAGE2,sizeof(USAGE2));
+						uexit(USAGE1);
 			}
 		}
 	FLAGFORLOOPEND:;	
@@ -78,7 +85,6 @@ int parse_flags(int argc,char **argv,struct struct_flags *flags)
 	//if hits this, error
 	return -1;
 }
-*/
 int process_regex()
 {
 	//"registers"
@@ -101,8 +107,13 @@ int readin()
 	strm.lNum++;
 	return readline(strm.in->fd,strm.line);
 }
+void uexit(char *msg)
+{
+	write(1,msg,sterlen(msg));
+	_exit(1);
+}
 void fubar(char *err)
 {
-	write(1,err,sterlen(err));
-	_exit(1);
+	write(2,err,sterlen(err));
+	_exit(2);
 }

@@ -4,6 +4,8 @@
  */
 
 #include <unistd.h>
+//debug
+#include <stdio.h>
 
 #define stdfun
 
@@ -35,26 +37,73 @@ int ati(char *str)
 	int i;
 	return i;
 }
-int memcp(char *data,char *target,size_t size)
-{
-	for(int i=size;i!=0;i--)
-	{
-		*(target+i)=*(data+i);
-	}
-	return size;
-}
-int readline(int fd,char *buff)
+int memcp(char *source,char *destin,size_t size)
 {
 	int i;
+	for(i=0;i<(size);i++)
+	{
+		*(destin+i)=*(source+i);
+	}
 	return i;
+}
+int readline(int fd,char *destin)
+{
+	int i,j,c=0;
+	char buff[32];
+
+	while(1)
+	{
+		i=read(fd,buff,32);
+		if(i!=32) goto READLINEEND;
+
+		i=0;
+		while(buff[i]!=0xa && i!=32) i++;
+		if(i>=32)
+		{
+			memcp(buff,&(*(destin+c)),32);
+			c+=32;
+		}
+	}
+
+	READLINEEND:;
+	j=0;
+	while(buff[j]!=0xa && j<i) 
+	{
+		printf("%d %c\n",j,buff[j]);
+		j++;
+	}
+	memcp(buff,&(*(destin+c)),j);
+	c+=i;
+
+	return c;
 }
 int buffwrite(char *source,file *strmout,size_t size)
 {
+	int i=0,j;
+
 	if((1024-strmout->index)<size) 
 	{
 		fsflush(strmout);
 	}
-	return memcp(source,&strmout->buff[strmout->index],size);
+
+	if(size>1024)
+	{
+		j=size;
+		while(i<size)
+		{
+			
+			while(j>1024)
+			{
+				i+=memcp(source,&strmout->buff[strmout->index],1024);
+				fsflush(strmout);
+				j-=1024;
+			}
+			if(j==0) return i;
+			else i+=memcp(source,&strmout->buff[strmout->index],j);
+		}
+	}
+	else i=memcp(source,&strmout->buff[strmout->index],size);
+	return i;
 }
 int fsflush(file *strmout)
 {

@@ -8,6 +8,7 @@ grep recreation as an exercise
 include order:
 unistd->grepr_lib(stdfun->regex_lib->grepr_glob->grepr_fun)->grepr
 
+_main:
 -initialization
 	-initilize strm
 	-set strm.in->fd=1
@@ -27,3 +28,6 @@ unistd->grepr_lib(stdfun->regex_lib->grepr_glob->grepr_fun)->grepr
 			-print
 	-readin
 -while readin!=EOF (signed int -1)
+
+_parse_regex()
+
