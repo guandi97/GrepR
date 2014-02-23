@@ -11,7 +11,7 @@ include order:
 unistd->grepr_lib(stdfun->regex_lib->grepr_glob->grepr_fun)->grepr
 
 
-_main:
+_main(...):
 
 	-initialization
 
