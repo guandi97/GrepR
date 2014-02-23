@@ -13,43 +13,43 @@ unistd->grepr_lib(stdfun->regex_lib->grepr_glob->grepr_fun)->grepr
 
 _main:
 
--initialization
+	-initialization
 
-	-initilize strm
+		-initilize strm
 	
-	-set strm.in->fd=1
+		-set strm.in->fd=1
 	
-	-set file *out
+		-set file *out
 	
-	-initialize gegex
+		-initialize gegex
 	
--proccess flags
+	-proccess flags
 
-	-check if ==argc-1
+		-check if ==argc-1
 	
-	-if -f flag
+		-if -f flag
 	
-		-change strm.in->fd
+			-change strm.in->fd
 		
--process regex
+	-process regex
 
-	-check syntax
+		-check syntax
 	
-	-set gegex.num
+		-set gegex.num
 	
--setup for fist Alliteration of loop
+	-setup for fist Alliteration of loop
 
--do loop
+	-do loop
 
-	-parse regex
+		-parse regex
 	
-		-if gegex.index==gegex.num
+			-if gegex.index==gegex.num
 		
-			-print
+				-print
 			
-	-readin
+		-readin
 	
--while readin!=EOF (signed int -1)
+	-while readin!=EOF (signed int -1)
 
 
 _parse_regex()
