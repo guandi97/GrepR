@@ -8,7 +8,7 @@ grep recreation as an exercise
 
 include order:
 
-unistd.h->grepr_lib.h((stdfun.h\\|asmfun.h)->regex_lib.h(...)->grepr_glob.h->grepr_fun.h)->grepr.c
+unistd.h->grepr_lib.h((stdfun.h||asmfun.h)->regex_lib.h(...)->grepr_glob.h->grepr_fun.h)->grepr.c
 
 
 _main(...):
