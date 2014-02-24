@@ -22,9 +22,10 @@ int fsflush(file*);
 
 struct struct_file
 {
+	#define FBUFF 1024
 	int fd;
 	size_t index;
-	char buff[1024];
+	char buff[FBUFF];
 };
 
 int sterlen(char *str,char delim)
@@ -117,7 +118,7 @@ int buffwrite(char *source,file *strmout,size_t size)
 {
 	int i;
 
-	if((1024-strmout->index)<size) 
+	if((FBUFF-strmout->index)<size) 
 	{
 		fsflush(strmout);
 	}
