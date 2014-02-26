@@ -11,13 +11,14 @@
 #define stdfun
 
 typedef struct struct_file file;
-int sterlen(char*,char);						//loops until delim is found
-int ati(char*);
-int ungReadi(int,char*,size_t);
-int memcp(char*,char*,size_t);
-int readup(int,char*,char);
-int buffwrite(char*,file*,size_t);
-int fsflush(file*);
+int sterlen(char*,char);						//returns incrementer;loops until delim is found
+int ati(char*);								//returns integer value of ascii string
+int intasc(int,char*);							//return length;convert int to ascii 
+int ungReadi(int,char*,size_t);						//return # bytes read;read, and then clear buffer
+int memcp(char*,char*,size_t);						//return # bytes copied;copy mem by byte
+int readup(int,char*,char);						//return # bytes read;read up until delim
+int buffwrite(char*,file*,size_t);					//return # bytes put in buffer;buffered output
+int fsflush(file*);							//return # bytes flushed;flush file buffer
 
 
 struct struct_file
@@ -41,11 +42,14 @@ int ati(char *str)
 	const int k=sterlen(str,0x0)-1;
 	int l=k;
 	{
-		for(i=0;i<k;i++)
+		i=0;
+		if(*str=='-') i=1;
+		for(i=i;i<k;i++)
 		{
 			l--;
 			switch(*(str+i))
 			{
+				case '0': break;
 				case '1': j+=(pow(10,l)*1); break;
 				case '2': j+=(pow(10,l)*2); break;
 				case '3': j+=(pow(10,l)*3); break;
@@ -57,7 +61,13 @@ int ati(char *str)
 				case '9': j+=(pow(10,l)*9); break;
 			}
 		}
+		if(*str=='-') j*=-1;
 	}
+	return j;
+}
+int intasc(int source,char *dest)
+{
+	int i,j;
 	return j;
 }
 int ungReadi(int fd,char *buff,size_t size)
@@ -125,6 +135,7 @@ int buffwrite(char *source,file *strmout,size_t size)
 
 	i=memcp(source,&strmout->buff[strmout->index],size);
 	size+=i;
+	strmout->index=size;
 	return i;
 }
 int fsflush(file *strmout)

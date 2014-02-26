@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 			//check parse_regex
 			if(parse_regex()==-1) goto MAIN_DO50;
 		}
-		buffwrite(gegex.line,out,c);
+		formOut(gegex.line,out,c);
 
 		MAIN_DO50:;
 		//reset regex index for next loop

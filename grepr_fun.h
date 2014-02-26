@@ -10,6 +10,7 @@ int parse_flags(int,char**);				//return # of index
 int process_regex(); 								//return regex #
 int parse_regex();								//return index of last reg
 int readin();									//return line size
+int formOut(char*,file*,size_t);
 void uexit(char*);
 void fubar(char*);
 
@@ -37,7 +38,7 @@ int parse_flags(int argc,char **argv)
 			case 'f': 	flags.f=1; 
 					i++;
 					//sterlen+1 because need to also copy the null
-					if(memcp(argv[i],flags.file,(sterlen(argv[i])+1))==-1) fubar("failure: parse_flags: memcp()\n");
+					if(memcp(argv[i],flags.file,(sterlen((argv[i])+1,0x0))==-1)) fubar("failure: parse_flags: memcp()\n");
 					c=open(flags.file,O_RDONLY);
 					if(c==-1) fubar("failure: parse_flags: open()\n");
 					strm.in->fd=c;
@@ -88,7 +89,7 @@ int parse_flags(int argc,char **argv)
 int process_regex()
 {
 	//"registers"
-	int ax,cx,si,di,dx,l=sterlen(gegex.expr);
+	int ax,cx,si,di,dx,l=sterlen(gegex.expr,0x0);
 	ax=cx=si=di=dx=0;
 
 	while(cx!=l)
@@ -101,19 +102,31 @@ int process_regex()
 int parse_regex()
 {
 	return 0;
-}
-int readin()
-{
+} int readin() {
 	strm.lNum++;
-	return readline(strm.in->fd,strm.line);
+	return readup(strm.in->fd,strm.line,0xa);
+}
+int formOut(char *source,file *out,size_t size)
+{
+	char buff[4];
+	int c;
+	if(flags.n==1)
+	{
+		c=intasc(strm.lNum,buff)+1;
+		buff[c]=0x0;
+		buff[0]=buffwrite(buff,out,c);
+	}
+	buffwrite(strm.line,out,index
+	c+=index
+	return c;
 }
 void uexit(char *msg)
 {
-	write(1,msg,sterlen(msg));
+	write(1,msg,sterlen(msg,0x0));
 	_exit(1);
 }
 void fubar(char *err)
 {
-	write(2,err,sterlen(err));
+	write(2,err,sterlen(err,0x0));
 	_exit(2);
 }
